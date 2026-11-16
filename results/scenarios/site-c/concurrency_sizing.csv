@@ -1,0 +1,11 @@
+limit,rate,rate_ok,peak_threads,bandwidth_needed,pipe_ok,time_over_pipe_pct,guaranteed,sim_on_time_at_peak,sim_min_threads
+1min,25.0,False,9,225.0,True,0.0,False,93.892,
+1min,50.0,False,7,350.0,False,1.9066275641198705e-05,False,97.75399999999999,
+1min,100.0,False,5,500.0,False,0.0067465314848439125,False,99.312,
+1min,200.0,False,4,800.0,False,0.200759914754384,False,99.818,
+1min,300.0,True,4,1200.0,False,0.08808471624789954,False,99.982,1.0
+5min,25.0,False,9,225.0,True,0.0,False,99.564,
+5min,50.0,True,7,350.0,False,1.9066275641198705e-05,False,100.0,4.0
+5min,100.0,True,5,500.0,False,0.0067465314848439125,False,100.0,1.0
+5min,200.0,True,4,800.0,False,0.200759914754384,False,100.0,1.0
+5min,300.0,True,4,1200.0,False,0.08808471624789954,False,100.0,1.0

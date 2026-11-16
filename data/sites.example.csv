@@ -1,0 +1,3 @@
+site,file,max_mbps
+north,data/real/north.parquet,1000
+south,data/real/south.parquet,500

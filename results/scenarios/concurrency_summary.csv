@@ -1,0 +1,7 @@
+site,max,1min,5min
+site-a,1000,none,none
+site-b,500,none,none
+site-c,300,1 @ 300 (simulated),1 @ 100 (simulated)
+site-d,800,none,2 @ 500 (simulated)
+site-e,400,none,"4 @ 100 (guaranteed, simulator says 2 is enough)"
+site-f,600,none,none

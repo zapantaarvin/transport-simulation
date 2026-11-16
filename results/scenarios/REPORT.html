@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scenario Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--text-400:#2d2a24;--text-300:#5f5646;--bg:#f5efe6;--beige-500:rgb(241,229,213);--beige-600:rgb(233,222,208);
+  --beige-700:rgb(223,209,188);--orange:#ff8400;--orange-tint:#ffead0;--orange-ink:#a35400;--white:#fff;--blue-500:#052e87;--cyan-500:#0086bb;
+  --good:#2f8f6b;--good-tint:#e4f0ea;--good-ink:#277658;--warn:#b5791f;--warn-tint:#f6ecd8;--warn-ink:#906019;
+  --critical:#c23b2e;--critical-tint:#f7dfda;--critical-ink:#b6372b;--radius-md:12px;--space-xs:8px;--space-sm:12px;--space-md:20px;--space-lg:32px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text-400);font-family:Urbanist,system-ui,sans-serif;letter-spacing:.02em;line-height:1.55}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px 56px}
+.mono{font-variant-numeric:tabular-nums}
+code{font-family:ui-monospace,Menlo,monospace;font-size:13px;background:var(--beige-500);padding:1px 6px;border-radius:6px}
+h1{font-size:32px;font-weight:800;margin:0}
+h2{font-size:23px;font-weight:800;margin:0 0 var(--space-xs)}
+h3{font-size:16px;font-weight:700;margin:var(--space-md) 0 6px}
+p{margin:0 0 var(--space-sm)}
+.eyebrow{color:var(--orange-ink);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.1em}
+header{padding:var(--space-lg) 0 var(--space-sm)}
+header p{color:var(--text-300);max-width:760px}
+.strip{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--beige-700)}
+.strip-in{max-width:1100px;margin:0 auto;padding:var(--space-xs) 16px;overflow-x:auto;scrollbar-width:none}
+.tabs{display:inline-flex;gap:2px;background:var(--white);border-radius:999px;padding:5px}
+.tabs a{text-decoration:none;color:var(--text-300);font-weight:700;font-size:13px;padding:5px 12px;border-radius:999px;white-space:nowrap}
+.tabs a:hover{background:var(--beige-500)}
+section{margin-top:var(--space-lg);scroll-margin-top:60px}
+.card{background:var(--white);border-radius:var(--radius-md);box-shadow:0 1px 2px rgba(45,42,36,.05);padding:var(--space-md)}
+.grid{display:grid;gap:var(--space-sm)}.grid>*{min-width:0}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr))}
+@media (max-width:600px){h1{font-size:26px}.flow .arr{display:none}}
+.kpi{background:var(--white);border-radius:var(--radius-md);border-left:4px solid var(--orange);padding:var(--space-sm) var(--space-md);box-shadow:0 1px 2px rgba(45,42,36,.05)}
+.kpi .k{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-300)}
+.kpi .v{font-size:17px;font-weight:800}
+.kpi .s{font-size:13.5px;color:var(--text-300)}
+.call{border-radius:var(--radius-md);padding:var(--space-sm) var(--space-md);margin:var(--space-sm) 0}
+.call b.t{display:block;text-transform:uppercase;font-size:12px;letter-spacing:.08em;margin-bottom:2px}
+.call.warn{background:var(--warn-tint)}.call.warn b.t{color:var(--warn-ink)}
+.call.tip{background:var(--orange-tint)}.call.tip b.t{color:var(--orange-ink)}
+.call.good{background:var(--good-tint)}.call.good b.t{color:var(--good-ink)}
+.call.bad{background:var(--critical-tint)}.call.bad b.t{color:var(--critical-ink)}
+.pill{display:inline-block;border-radius:999px;text-transform:uppercase;font-size:10.5px;font-weight:700;padding:2px 9px;letter-spacing:.05em;white-space:nowrap}
+.pass{background:var(--good-tint);color:var(--good-ink)}.fail{background:var(--critical-tint);color:var(--critical-ink)}.mid{background:var(--warn-tint);color:var(--warn-ink)}
+.tscroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-300);padding:6px 8px;border-bottom:2px solid var(--beige-700);white-space:nowrap}
+td{padding:7px 8px;border-bottom:1px solid var(--beige-600);vertical-align:top}
+tr:last-child td{border-bottom:none}
+ul{margin:0 0 var(--space-sm);padding-left:20px}li{margin-bottom:4px}
+details{background:var(--white);border-radius:var(--radius-md);margin:var(--space-xs) 0;box-shadow:0 1px 2px rgba(45,42,36,.05)}
+summary{cursor:pointer;padding:var(--space-sm) var(--space-md);font-weight:700;list-style:none;display:flex;gap:8px;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"+";display:inline-grid;place-items:center;width:22px;height:22px;border-radius:999px;background:var(--beige-500);font-weight:800;flex-shrink:0}
+details[open] summary::before{content:"–"}
+details .body{padding:0 var(--space-md) var(--space-md)}
+summary:focus-visible,a:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+img{width:100%;display:block;border-radius:var(--radius-md);background:var(--white);box-shadow:0 1px 2px rgba(45,42,36,.05)}
+figure{margin:var(--space-sm) 0}figcaption{font-size:13px;color:var(--text-300);margin-top:5px}
+.flow{display:flex;gap:var(--space-xs);flex-wrap:wrap;align-items:stretch;margin:var(--space-sm) 0}
+.flow .box{flex:1 1 180px;background:var(--white);border:2px solid var(--beige-700);border-radius:var(--radius-md);padding:var(--space-sm)}
+.flow .box.hot{background:var(--orange);border-color:var(--orange)}
+.flow .box b{display:block}.flow .box span{font-size:13.5px;color:var(--text-300)}.flow .box.hot span{color:var(--text-400)}
+.flow .arr{align-self:center;font-weight:800;font-size:20px}
+.site-head{display:flex;gap:var(--space-sm);align-items:center;flex-wrap:wrap;margin-bottom:var(--space-xs)}
+.badge{width:40px;height:40px;border-radius:999px;background:var(--orange);display:grid;place-items:center;font-weight:800;font-size:18px;flex-shrink:0}
+</style>
+</head>
+<body>
+<nav class="strip" aria-label="Sections"><div class="strip-in"><div class="tabs">
+  <a href="#how">How to read</a><a href="#summary">Summary</a><a href="#maxrate">Max-rate test</a><a href="#curve">Sizing curve</a>
+  <a href="#a">Site A</a><a href="#b">Site B</a><a href="#c">Site C</a><a href="#d">Site D</a><a href="#e">Site E</a><a href="#f">Site F</a>
+</div></div></nav>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Transport Simulation · scenarios</div>
+  <h1>Six sites: do all files finish within 1 min and 5 min?</h1>
+  <p>Six made-up sites, each with 50,000 file requests over October. For each site the question is:
+  <b>which settings get every file delivered within 1 minute, and within 5 minutes, of its request?</b></p>
+  <div class="grid g4">
+    <div class="kpi"><div class="k">How settings are written</div><div class="v mono">4 @ 200</div><div class="s">4 threads (files moving at once), each up to 200 MB/s</div></div>
+    <div class="kpi"><div class="k">Max</div><div class="v mono">1000</div><div class="s">the site's total pipe in MB/s, shared by all threads</div></div>
+    <div class="kpi" style="border-left-color:var(--good)"><div class="k">Pass ✓</div><div class="v">100% on time</div><div class="s">every one of the 50,000 files made the limit</div></div>
+    <div class="kpi" style="border-left-color:var(--critical)"><div class="k">Fail</div><div class="v">even 1 late</div><div class="s">99.9% on time is still a fail</div></div>
+  </div>
+  <div class="call warn"><b class="t">Synthetic traffic</b>These sites are invented from verbal descriptions of real traffic patterns, not measured data. The method carries over to real exports; the numbers don't.
+  New to NAPM? Read <a href="../../STUDY-GUIDE.html#m0" style="color:var(--orange-ink)">module 0 of the study guide</a> first.</div>
+</header>
+
+<section id="how">
+  <h2>Which charts set which parameter</h2>
+  <div class="flow">
+    <div class="box"><b>1 · Before run</b><span>Looks at the requests only. Is the max rate big enough? How many threads to start with? Can the biggest file make 1 min?</span></div><div class="arr">→</div>
+    <div class="box hot"><b>2 · Settings grid</b><span>Every threads × per-thread rate combination → % on time. Find the cheapest ✓ (100%).</span></div><div class="arr">→</div>
+    <div class="box"><b>3 · Check the pick</b><span>Day × hour heatmap and queue chart: which days and hours have late files, and why.</span></div><div class="arr">→</div>
+    <div class="box"><b>4 · Tune</b><span>Use the table below to pick the knob that actually helps.</span></div>
+  </div>
+  <div class="card tscroll"><table>
+    <tr><th>Chart</th><th>What it tells you</th><th>Parameter it informs</th></tr>
+    <tr><td><b>a. Demand per 5 min</b></td><td>When demand goes above the pipe</td><td>Max rate (or spreading traffic)</td></tr>
+    <tr><td><b>b. Concurrent FTP needed</b></td><td>Transfers in flight if nothing waited, at the per-thread rate. A starting point for threads</td><td>Threads</td></tr>
+    <tr><td><b>c. Load-duration curve</b></td><td>% of time above 80% and 100% of max. Any time over 100% means some files will be late</td><td>Max rate</td></tr>
+    <tr><td><b>d. File sizes</b></td><td>% of files that can finish in 1 / 5 min alone at this per-thread rate. Under 100% here = that limit can't pass</td><td>Per-thread rate</td></tr>
+    <tr><td><b>Settings grid</b></td><td>% on time for every threads × rate. ✓ = every file on time</td><td>Threads + rate together</td></tr>
+    <tr><td><b>Day × hour heatmap</b></td><td>Blue = every file on time that hour, red = some late. Right column = whole day</td><td>Whether it's "always" or "only at bursts"</td></tr>
+  </table></div>
+
+  <h3>What to tune, by symptom in the settings grid</h3>
+  <div class="card tscroll"><table>
+    <tr><th>Symptom</th><th>Cause</th><th>Tune this</th><th>Seen in</th></tr>
+    <tr><td>Grid <b>plateaus</b> (more threads and more rate stop helping)</td><td>Demand above max rate at bursts</td><td><b>Max rate</b>, or spread or delay the burst</td><td>A, B, F</td></tr>
+    <tr><td>1 min never reaches 100%</td><td>Biggest file (15 GB) needs ≥ 250 MB/s for a whole minute, with no wait</td><td><b>Per-thread rate</b> and <b>max rate</b> together, or a separate rule for big files</td><td>A, B, D, E, F</td></tr>
+    <tr><td><b>More threads gets worse</b> (100% at 4, 99.9% at 8+)</td><td>Threads split the pipe, so a huge file slows down</td><td><b>Fewer threads</b>, each faster</td><td>C, D</td></tr>
+    <tr><td>Passes with tiny settings</td><td>Light traffic</td><td>Nothing. Keep 2–4 threads for redundancy</td><td>C, E (5 min)</td></tr>
+  </table></div>
+</section>
+
+<section id="summary">
+  <h2>Summary</h2>
+  <p>"Peak demand" = the most data asked for in one hour, and in one 5-minute stretch, as a % of max. Over 100% means more was asked for than the pipe can carry.
+  Where a limit passes, the cheapest passing setting is shown; where it fails, the best % reached.</p>
+  <div class="card tscroll"><table>
+    <tr><th>Site</th><th>Traffic</th><th>Max</th><th>Peak demand<br>hour / 5 min</th><th>5 min</th><th>1 min</th><th>What would fix it</th></tr>
+    <tr><td><b>A</b></td><td>24h, week 1 busier, very random</td><td class="mono">1000</td><td class="mono">65% / 157%</td>
+      <td><span class="pill fail">no</span> best 99.51%</td><td><span class="pill fail">no</span> best 97.59%</td><td>Max ×1.5 for 5 min, ×2 for both</td></tr>
+    <tr><td><b>B</b></td><td>2-day burst, then mellowing</td><td class="mono">500</td><td class="mono">246% / 304%</td>
+      <td><span class="pill fail">no</span> best 83.65%</td><td><span class="pill fail">no</span> best 82.31%</td><td>Max ×3 for 5 min, ×4 for both, or spread the burst</td></tr>
+    <tr><td><b>C</b></td><td>Office hours</td><td class="mono">300</td><td class="mono">17% / 46%</td>
+      <td><span class="pill pass">yes</span> 1 @ 100</td><td><span class="pill mid">only 1 @ 300</span></td><td>None for 5 min</td></tr>
+    <tr><td><b>D</b></td><td>Nightly batch + month-end</td><td class="mono">800</td><td class="mono">89% / 127%</td>
+      <td><span class="pill pass">yes</span> 4 @ 200</td><td><span class="pill fail">no</span> best 98.91%</td><td>Max ×1.5 → 4 @ 300 passes both</td></tr>
+    <tr><td><b>E</b></td><td>Steady, 10% huge files</td><td class="mono">400</td><td class="mono">10% / 43%</td>
+      <td><span class="pill pass">yes</span> 1 @ 200</td><td><span class="pill mid">only 1 @ 400</span></td><td>Per-thread rate, not threads</td></tr>
+    <tr><td><b>F</b></td><td>Outages, backlog rush</td><td class="mono">600</td><td class="mono">77% / 471%</td>
+      <td><span class="pill fail">no</span> best 97.09%</td><td><span class="pill fail">no</span> best 96.33%</td><td>Max ×3 for 5 min, or pace the backlog</td></tr>
+  </table></div>
+</section>
+
+<section id="maxrate">
+  <h2>Max-rate test: does a bigger pipe fix it?</h2>
+  <p>Same sites, same traffic, but the max rate multiplied by 1.5, 2, 3 and 4. Each cell is the best result found
+  (4–64 threads × 200/300/500 MB/s), as % of files on time for <b>5 min / 1 min</b>. <b>Bold 100</b> = the first step where that limit passes.</p>
+  <p class="small" style="color:var(--text-300)">The ×1 column only searched 4+ threads, so it can read a little lower than the summary above (D's 1 min: 98.06% here, 98.91% at 2 threads).</p>
+  <div class="card tscroll"><table>
+    <tr><th>Site</th><th>×1</th><th>×1.5</th><th>×2</th><th>×3</th><th>×4</th></tr>
+    <tr><td><b>A</b> (1000)</td><td class="mono">99.51 / 97.59</td><td class="mono"><b>100</b> / 99.96</td><td class="mono"><b>100 / 100</b></td><td class="mono">100 / 100</td><td class="mono">100 / 100</td></tr>
+    <tr><td><b>B</b> (500)</td><td class="mono">83.65 / 82.31</td><td class="mono">86.93 / 85.72</td><td class="mono">90.47 / 89.04</td><td class="mono"><b>100</b> / 99.98</td><td class="mono"><b>100 / 100</b></td></tr>
+    <tr><td><b>D</b> (800)</td><td class="mono"><b>100</b> / 98.06</td><td class="mono"><b>100 / 100</b></td><td class="mono">100 / 100</td><td class="mono">100 / 100</td><td class="mono">100 / 100</td></tr>
+    <tr><td><b>F</b> (600)</td><td class="mono">97.09 / 96.33</td><td class="mono">98.04 / 97.03</td><td class="mono">98.97 / 97.64</td><td class="mono"><b>100</b> / 97.60</td><td class="mono">100 / 99.34</td></tr>
+  </table></div>
+  <div class="call bad"><b class="t">1 min needs the whole pipe for the biggest file</b>A 15 GB file needs 250 MB/s for a full minute. It passes only when the per-thread rate is that high <i>and</i> the pipe has room for it at that moment. That's why 1 min needs about one more step of max rate than 5 min.</div>
+</section>
+
+<section id="curve">
+  <h2>A faster way to size: count transfers running at once</h2>
+  <p>Instead of trying every setting, draw how many transfers would be running at each moment: <b>+1 when a file starts, −1 when it finishes</b>,
+  pretending every file starts the moment it's requested.</p>
+  <div class="flow">
+    <div class="box"><b>1 · Rate</b><span>per-thread rate ≥ biggest file ÷ limit, or that file is late even with no wait</span></div><div class="arr">→</div>
+    <div class="box"><b>2 · Threads</b><span>highest point of the curve = threads needed so no file ever waits</span></div><div class="arr">→</div>
+    <div class="box hot"><b>3 · Pipe</b><span>peak × rate ≤ max → guaranteed pass. Otherwise the simulator decides</span></div>
+  </div>
+  <div class="card tscroll"><table>
+    <tr><th>Site</th><th>Max</th><th>5 min</th><th>1 min</th><th>Agrees with the grid?</th></tr>
+    <tr><td><b>A</b></td><td class="mono">1000</td><td><span class="pill fail">none</span></td><td><span class="pill fail">none</span></td><td>yes: bursts go over the pipe</td></tr>
+    <tr><td><b>B</b></td><td class="mono">500</td><td><span class="pill fail">none</span></td><td><span class="pill fail">none</span></td><td>yes</td></tr>
+    <tr><td><b>C</b></td><td class="mono">300</td><td class="mono">1 @ 100</td><td class="mono">1 @ 300</td><td>yes</td></tr>
+    <tr><td><b>D</b></td><td class="mono">800</td><td class="mono">2 @ 500</td><td><span class="pill fail">none</span></td><td>yes</td></tr>
+    <tr><td><b>E</b></td><td class="mono">400</td><td class="mono">2 @ 100</td><td><span class="pill fail">none</span></td><td>yes (4 @ 100 is the guaranteed version)</td></tr>
+    <tr><td><b>F</b></td><td class="mono">600</td><td><span class="pill fail">none</span></td><td><span class="pill fail">none</span></td><td>yes</td></tr>
+  </table></div>
+  <p class="small" style="color:var(--text-300);margin-top:var(--space-xs)">E's 1 min passes only at 1 @ 400 (the full pipe), which is outside the rates the curve tried.</p>
+  <details><summary>How to read the curve chart (site D)</summary><div class="body">
+    <img src="site-d/6_concurrency.png" alt="Site D: transfers running at once over October, peak 8, red dashed line at 1.6">
+    <p style="margin-top:var(--space-sm)">Blue = the most transfers running at once in each hour. Red dashed line = how many the pipe can run at full speed (800 ÷ 500 = 1.6).
+    The curve pokes above it at the nightly batch and month-end, so a guarantee isn't possible, but the simulator shows 2 threads @ 500 still gets every file in within 5 min:
+    files can wait a little and still make it.</p></div></details>
+  <details><summary>Curve charts for the other sites</summary><div class="body">
+    <img src="site-a/6_concurrency.png" alt="Site A concurrency"><br><img src="site-b/6_concurrency.png" alt="Site B concurrency"><br>
+    <img src="site-c/6_concurrency.png" alt="Site C concurrency"><br><img src="site-e/6_concurrency.png" alt="Site E concurrency"><br>
+    <img src="site-f/6_concurrency.png" alt="Site F concurrency"></div></details>
+</section>
+
+<!-- sites -->
+<section id="a">
+  <div class="site-head"><div class="badge">A</div><h2>Site A: 24h, week 1 busier, very random</h2><span class="pill fail">max rate too small</span></div>
+  <div class="grid g2">
+    <div class="card"><h3 style="margin-top:0">Observations</h3><ul>
+      <li>Average load is only 2%, but random spikes hit <b>157%</b> of max for 5 minutes (mostly week 1).</li>
+      <li>No setting gets every file in on time. Best: 64 @ 500 → 5 min 99.51% (242 late), 1 min 97.59%.</li>
+      <li>The late files cluster on Oct 5 at 4:00 and Oct 7 at 0:00, the biggest spikes.</li>
+    </ul></div>
+    <div class="card"><h3 style="margin-top:0">Tuning</h3><ul>
+      <li><b>Max ×1.5 (1500)</b> → 4 @ 500 passes 5 min (1 min: 19 late).</li>
+      <li><b>Max ×2 (2000)</b> → 4 @ 500 passes both.</li>
+      <li>Threads alone can't fix it.</li>
+    </ul></div>
+  </div>
+  <figure><img src="site-a/0_prerun.png" alt="Site A before-run check"><figcaption>Before run: spikes in week 1 (a), 0.09% of time over max (c).</figcaption></figure>
+  <figure><img src="site-a/settings_grid.png" alt="Site A settings grid"><figcaption>No ✓ anywhere: the 64-thread row gets closest.</figcaption></figure>
+  <details><summary>After-run: heatmap, queue, latency (at 64 @ 500)</summary><div class="body">
+    <img src="site-a/5_sla_heatmap.png" alt="Site A heatmap"><br><img src="site-a/4_queue_busiest_day.png" alt="Site A queue"><br><img src="site-a/2_latency_spread.png" alt="Site A latency"></div></details>
+</section>
+
+<section id="b">
+  <div class="site-head"><div class="badge">B</div><h2>Site B: 2-day burst, then mellowing</h2><span class="pill fail">max rate too small</span></div>
+  <div class="grid g2">
+    <div class="card"><h3 style="margin-top:0">Observations</h3><ul>
+      <li>The burst runs at <b>246%</b> of max for an hour (304% over 5 min), right at the start of the month.</li>
+      <li>The grid <b>plateaus at about 83%</b>: past 8 threads @ 100, nothing improves. That's the signature of a pipe that's too small.</li>
+      <li>Oct 1 has only about half its files on time; the rest of the month is about 100%.</li>
+    </ul></div>
+    <div class="card"><h3 style="margin-top:0">Tuning</h3><ul>
+      <li><b>Max ×3 (1500)</b> → 4 @ 500 passes 5 min. <b>×4 (2000)</b> passes both.</li>
+      <li>Or spread the burst: if it's backfill, pace it over more hours.</li>
+    </ul></div>
+  </div>
+  <figure><img src="site-b/0_prerun.png" alt="Site B before-run check"><figcaption>Before run: the red dots in (a) are the burst; (c) shows 0.41% of time over max.</figcaption></figure>
+  <figure><img src="site-b/settings_grid.png" alt="Site B settings grid"><figcaption>All red, stuck at about 83%. No thread or rate setting fixes it.</figcaption></figure>
+  <details><summary>After-run: heatmap, queue, latency</summary><div class="body">
+    <img src="site-b/5_sla_heatmap.png" alt="Site B heatmap"><br><img src="site-b/4_queue_busiest_day.png" alt="Site B queue"><br><img src="site-b/2_latency_spread.png" alt="Site B latency"></div></details>
+</section>
+
+<section id="c">
+  <div class="site-head"><div class="badge">C</div><h2>Site C: office hours</h2><span class="pill pass">easy for 5 min</span></div>
+  <div class="grid g2">
+    <div class="card"><h3 style="margin-top:0">Observations</h3><ul>
+      <li>Busiest hour 17%, busiest 5 min 46%. Never near the pipe.</li>
+      <li>5 min passes from <b>1 @ 100</b> up.</li>
+      <li>1 min passes <b>only at 1 @ 300</b>, one thread using the whole pipe. At 2 @ 300, 9 files are late: two threads split the 300 MB/s, so a 15 GB file slows down.</li>
+    </ul></div>
+    <div class="card"><h3 style="margin-top:0">Tuning</h3><ul>
+      <li>5 min: <b>2–4 threads @ 100</b> (the extras are for redundancy).</li>
+      <li>1 min: one thread at full pipe passes, but one stuck file blocks everything. A bigger max rate is safer.</li>
+    </ul></div>
+  </div>
+  <figure><img src="site-c/0_prerun.png" alt="Site C before-run check"></figure>
+  <details><summary>Settings grid + after-run charts</summary><div class="body">
+    <img src="site-c/settings_grid.png" alt="Site C grid"><br><img src="site-c/5_sla_heatmap.png" alt="Site C heatmap"><br><img src="site-c/4_queue_busiest_day.png" alt="Site C queue"></div></details>
+</section>
+
+<section id="d">
+  <div class="site-head"><div class="badge">D</div><h2>Site D: nightly batch + month-end surge</h2><span class="pill mid">5 min yes, 1 min needs more pipe</span></div>
+  <div class="grid g2">
+    <div class="card"><h3 style="margin-top:0">Observations</h3><ul>
+      <li>Daily batch spikes at 1:00, and the month-end surge pushes past max (127% over 5 min).</li>
+      <li>5 min passes at <b>2 @ 500</b> and <b>4 @ 200 / 300 / 500</b>. At 8+ threads it drops to 99.9% (4 files late at 8 @ 100): too many threads split the pipe.</li>
+      <li>1 min tops out at <b>98.91%</b>: files are bigger here (median 500 MB).</li>
+    </ul></div>
+    <div class="card"><h3 style="margin-top:0">Tuning</h3><ul>
+      <li>5 min: <b>4 threads @ 200</b>. Don't go above 4.</li>
+      <li>1 min: <b>max ×1.5 (1200)</b> → 4 @ 300 passes both.</li>
+    </ul></div>
+  </div>
+  <figure><img src="site-d/0_prerun.png" alt="Site D before-run check"><figcaption>Daily batch spikes (a).</figcaption></figure>
+  <figure><img src="site-d/settings_grid.png" alt="Site D settings grid"><figcaption>5 min: ✓ only in the 2–4 thread rows at 200+ MB/s. 1 min: no ✓.</figcaption></figure>
+  <details><summary>After-run: heatmap, queue, latency (at 2 @ 500)</summary><div class="body">
+    <img src="site-d/5_sla_heatmap.png" alt="Site D heatmap"><br><img src="site-d/4_queue_busiest_day.png" alt="Site D queue"><br><img src="site-d/2_latency_spread.png" alt="Site D latency"></div></details>
+</section>
+
+<section id="e">
+  <div class="site-head"><div class="badge">E</div><h2>Site E: steady, 90% small + 10% huge</h2><span class="pill pass">easy for 5 min</span></div>
+  <div class="grid g2">
+    <div class="card"><h3 style="margin-top:0">Observations</h3><ul>
+      <li>Light load (busiest hour 10%). 5 min passes from <b>1 @ 200</b> or <b>2 @ 100</b>.</li>
+      <li>1 min misses by a handful: 2 @ 300 has 7 late files out of 50,000 (99.986%). A 15 GB file at 300 MB/s takes 50s alone, so any wait pushes it over.</li>
+      <li>Checked outside the grid: <b>1 @ 400</b> (the whole pipe) passes; 2 @ 400 has 1 late.</li>
+    </ul></div>
+    <div class="card"><h3 style="margin-top:0">Tuning</h3><ul>
+      <li>5 min: <b>2–4 threads @ 100</b>.</li>
+      <li>1 min: per-thread rate is the knob, not threads. Only one full-pipe thread passes here, so a bigger pipe is the practical fix.</li>
+    </ul></div>
+  </div>
+  <figure><img src="site-e/0_prerun.png" alt="Site E before-run check"><figcaption>Panel d shows the two size groups: a cluster of small files and a jump for the huge 10%.</figcaption></figure>
+  <details><summary>Settings grid + after-run charts</summary><div class="body">
+    <img src="site-e/settings_grid.png" alt="Site E grid"><br><img src="site-e/5_sla_heatmap.png" alt="Site E heatmap"><br><img src="site-e/4_queue_busiest_day.png" alt="Site E queue"></div></details>
+</section>
+
+<section id="f">
+  <div class="site-head"><div class="badge">F</div><h2>Site F: outages, backlog rush</h2><span class="pill fail">max rate too small at rushes</span></div>
+  <div class="grid g2">
+    <div class="card"><h3 style="margin-top:0">Observations</h3><ul>
+      <li>26 of 30 days are perfect. The Oct 22 (9.7 h) and Oct 27 (9.2 h) outages cause rushes at up to <b>471%</b> of max.</li>
+      <li>Grid plateaus at <b>97.09%</b> (5 min): the same pipe-too-small signature as B.</li>
+    </ul></div>
+    <div class="card"><h3 style="margin-top:0">Tuning</h3><ul>
+      <li><b>Max ×3 (1800)</b> → 8 @ 500 passes 5 min. 1 min still fails even at ×4 (99.34%).</li>
+      <li>Better: <b>pace the backlog</b> after an outage instead of releasing it all at once.</li>
+      <li>Confirm what your request time means after an outage (arrival vs original creation).</li>
+    </ul></div>
+  </div>
+  <figure><img src="site-f/0_prerun.png" alt="Site F before-run check"><figcaption>Rush spikes after the Oct 19, 22 and 27 outages (a, b).</figcaption></figure>
+  <figure><img src="site-f/5_sla_heatmap.png" alt="Site F heatmap"><figcaption>Gray = outage (no requests), red = the rush afterwards.</figcaption></figure>
+  <details><summary>Settings grid, queue, latency</summary><div class="body">
+    <img src="site-f/settings_grid.png" alt="Site F grid"><br><img src="site-f/4_queue_busiest_day.png" alt="Site F queue"><br><img src="site-f/2_latency_spread.png" alt="Site F latency"></div></details>
+</section>
+</div>
+</body>
+</html>

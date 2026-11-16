@@ -1,0 +1,13 @@
+.venv/
+# 97 MB, regenerate with --make-sample
+data/samples/big.parquet
+# real work data stays local
+data/real/*
+!data/real/.gitkeep
+data/scenarios/
+# real-data results stay local too
+results/real/
+
+# macOS
+.DS_Store
+__pycache__/

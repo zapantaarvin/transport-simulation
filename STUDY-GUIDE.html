@@ -1,0 +1,717 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NAPM Study Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light;
+  --text-400:#2d2a24; --text-300:#5f5646; --bg:#f5efe6;
+  --beige-500:rgb(241,229,213); --beige-600:rgb(233,222,208); --beige-700:rgb(223,209,188);
+  --orange:#ff8400; --orange-tint:#ffead0; --orange-ink:#a35400; --white:#fff;
+  --blue-500:#052e87; --cyan-500:#0086bb;
+  --good:#2f8f6b; --good-tint:#e4f0ea; --good-ink:#277658;
+  --warn:#b5791f; --warn-tint:#f6ecd8; --warn-ink:#906019;
+  --critical:#c23b2e; --critical-tint:#f7dfda; --critical-ink:#b6372b;
+  --radius-sm:6px; --radius-md:12px; --radius-lg:16px;
+  --space-xxs:4px; --space-xs:8px; --space-sm:12px; --space-md:20px; --space-lg:32px; --space-xl:56px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text-400);font-family:Urbanist,system-ui,sans-serif;
+  letter-spacing:.02em;line-height:1.55;font-size:16px}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px var(--space-xl)}
+.mono{font-variant-numeric:tabular-nums}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13.5px}
+code{background:var(--beige-500);padding:1px 6px;border-radius:var(--radius-sm)}
+pre{background:var(--white);border-radius:var(--radius-md);padding:var(--space-sm) var(--space-md);overflow-x:auto;
+  box-shadow:0 1px 2px rgba(45,42,36,.05);line-height:1.45;margin:var(--space-sm) 0}
+pre code{background:none;padding:0}
+h1{font-size:34px;font-weight:800;margin:0;line-height:1.15}
+h2{font-size:24px;font-weight:800;margin:0 0 var(--space-xs)}
+h3{font-size:17px;font-weight:700;margin:var(--space-md) 0 var(--space-xs)}
+p{margin:0 0 var(--space-sm)}
+a{color:var(--orange-ink)}
+.eyebrow{color:var(--orange-ink);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.1em}
+
+/* sticky strip */
+.strip{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--beige-700)}
+.strip-in{max-width:980px;margin:0 auto;padding:var(--space-xs) 16px;display:flex;gap:var(--space-xs);
+  align-items:center;overflow-x:auto;scrollbar-width:none}
+.strip-in::-webkit-scrollbar{display:none}
+.tabs{display:flex;gap:2px;background:var(--white);border-radius:999px;padding:5px;flex-shrink:0}
+.tabs a{text-decoration:none;color:var(--text-300);font-weight:700;font-size:13px;padding:5px 11px;border-radius:999px;white-space:nowrap}
+.tabs a:hover{background:var(--beige-500)}
+.tabs a.on{background:var(--orange);color:var(--text-400)}
+.progress{background:var(--good-tint);color:var(--good-ink)!important;padding:6px 12px;border-radius:999px;font-weight:700;font-size:13px;white-space:nowrap;color:var(--text-300);flex-shrink:0}
+
+header{padding:var(--space-lg) 0 var(--space-md)}
+header p{color:var(--text-300);max-width:680px;font-size:17px;margin-top:var(--space-xs)}
+
+.card{background:var(--white);border-radius:var(--radius-md);box-shadow:0 1px 2px rgba(45,42,36,.05);padding:var(--space-md)}
+section.mod{margin-top:var(--space-lg);scroll-margin-top:64px}
+.mod-head{display:flex;gap:var(--space-sm);align-items:flex-start;margin-bottom:var(--space-sm)}
+.num{flex-shrink:0;width:38px;height:38px;border-radius:999px;background:var(--orange);color:var(--text-400);
+  font-weight:800;display:grid;place-items:center}
+.mod-head .goal{color:var(--text-300);margin:0}
+.done{margin-left:auto;flex-shrink:0;display:flex;gap:6px;align-items:center;font-size:13px;font-weight:700;color:var(--text-300);cursor:pointer}
+.done input{accent-color:var(--good);width:18px;height:18px}
+
+.grid{display:grid;gap:var(--space-sm)}
+.grid>*,.lab>*,.mod-head>div{min-width:0}
+.g2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.kpi{background:var(--white);border-radius:var(--radius-md);border-left:4px solid var(--orange);padding:var(--space-sm) var(--space-md);
+  box-shadow:0 1px 2px rgba(45,42,36,.05)}
+.kpi .k{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-300)}
+.kpi .v{font-size:26px;font-weight:800}
+.kpi .s{font-size:13px;color:var(--text-300)}
+.kpi.blue{border-left-color:var(--blue-500)} .kpi.cyan{border-left-color:var(--cyan-500)}
+
+.call{border-radius:var(--radius-md);padding:var(--space-sm) var(--space-md);margin:var(--space-sm) 0}
+.call b.t{display:block;text-transform:uppercase;font-size:12px;letter-spacing:.08em;margin-bottom:2px}
+.call.tip{background:var(--orange-tint)} .call.tip b.t{color:var(--orange-ink)}
+.call.good{background:var(--good-tint)} .call.good b.t{color:var(--good-ink)}
+.call.warn{background:var(--warn-tint)} .call.warn b.t{color:var(--warn-ink)}
+.call.bad{background:var(--critical-tint)} .call.bad b.t{color:var(--critical-ink)}
+
+.pill{display:inline-block;border-radius:999px;text-transform:uppercase;font-size:10.5px;font-weight:700;padding:2px 9px;letter-spacing:.05em}
+.pill.pass{background:var(--good-tint);color:var(--good-ink)}
+.pill.fail{background:var(--critical-tint);color:var(--critical-ink)}
+.pill.mid{background:var(--warn-tint);color:var(--warn-ink)}
+
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-300);padding:6px 8px;border-bottom:2px solid var(--beige-700)}
+td{padding:7px 8px;border-bottom:1px solid var(--beige-600);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.tscroll{overflow-x:auto}
+
+details{background:var(--white);border-radius:var(--radius-md);margin:var(--space-xs) 0;box-shadow:0 1px 2px rgba(45,42,36,.05)}
+summary{cursor:pointer;padding:var(--space-sm) var(--space-md);font-weight:700;list-style:none;display:flex;gap:8px;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"+";display:inline-grid;place-items:center;width:22px;height:22px;border-radius:999px;background:var(--beige-500);font-weight:800;flex-shrink:0}
+details[open] summary::before{content:"–"}
+details .body{padding:0 var(--space-md) var(--space-md)}
+summary:focus-visible,a:focus-visible,input:focus-visible,button:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+
+figure{margin:var(--space-sm) 0}
+figure img{width:100%;border-radius:var(--radius-md);background:var(--white);box-shadow:0 1px 2px rgba(45,42,36,.05);display:block}
+figcaption{font-size:13.5px;color:var(--text-300);margin-top:6px}
+
+/* flow diagram */
+.flow{display:flex;align-items:stretch;gap:var(--space-xs);flex-wrap:wrap;margin:var(--space-sm) 0}
+.flow .box{flex:1 1 140px;background:var(--white);border-radius:var(--radius-md);padding:var(--space-sm);text-align:center;
+  box-shadow:0 1px 2px rgba(45,42,36,.05);border:2px solid var(--beige-700)}
+.flow .box.hot{background:var(--orange);border-color:var(--orange)}
+.flow .box b{display:block;font-size:15px}
+.flow .box span{font-size:13px;color:var(--text-300)}
+.flow .box.hot span{color:var(--text-400)}
+.flow .arr{align-self:center;font-weight:800;font-size:20px}
+
+/* lab */
+.lab{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:var(--space-md)}
+@media (max-width:760px){.lab{grid-template-columns:1fr}}
+.ctl{margin-bottom:var(--space-sm)}
+.ctl label{display:flex;justify-content:space-between;font-weight:700;font-size:14px}
+.ctl label span{color:var(--orange-ink)}
+.ctl input[type=range]{width:100%;accent-color:var(--orange)}
+.ctl small{color:var(--text-300);font-size:12.5px}
+.bars{display:grid;gap:10px;margin-top:var(--space-xs)}
+.bar{display:grid;grid-template-columns:44px 1fr 74px;align-items:center;gap:8px;font-size:14px}
+.track{position:relative;height:18px;background:var(--beige-500);border-radius:999px;overflow:hidden}
+.fill{position:absolute;left:0;top:0;bottom:0;background:var(--orange);border-radius:999px}
+.mark{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--critical)}
+.scale{display:grid;grid-template-columns:44px 1fr 74px;gap:8px;font-size:11.5px;color:var(--text-300)}
+.scale div:nth-child(2){position:relative;height:14px}
+.scale span{position:absolute;transform:translateX(-50%);white-space:nowrap}
+.try{counter-reset:t;padding:0;list-style:none;margin:var(--space-xs) 0 0}
+.try li{counter-increment:t;padding-left:30px;position:relative;margin-bottom:8px;font-size:14.5px}
+.try li::before{content:counter(t);position:absolute;left:0;top:1px;width:22px;height:22px;border-radius:999px;background:var(--orange-tint);
+  color:var(--orange-ink);font-weight:800;font-size:12px;display:grid;place-items:center}
+.small{font-size:13.5px;color:var(--text-300)}
+/* module 0: one file's life on a time line */
+.tl{display:grid;grid-template-columns:repeat(10,1fr);gap:2px;margin:var(--space-xs) 0 4px;border-radius:var(--radius-sm);overflow:hidden}
+.tl div{height:30px;display:grid;place-items:center;font-size:12.5px;font-weight:700}
+.tl .w{background:var(--beige-600);color:var(--text-300)}
+.tl .x{background:var(--orange);color:var(--text-400)}
+.tl-marks{display:grid;grid-template-columns:repeat(10,1fr);font-size:12.5px;color:var(--text-300)}
+.tl-marks span{white-space:nowrap}
+.lanes{display:grid;gap:6px;margin-top:var(--space-xs)}
+.lane{display:grid;grid-template-columns:70px 1fr;align-items:center;gap:8px;font-size:13.5px}
+.lane .track{height:16px}
+</style>
+</head>
+<body>
+
+<nav class="strip" aria-label="Modules">
+  <div class="strip-in">
+    <div class="progress mono" id="prog">0 / 11 done</div>
+    <div class="tabs" id="tabs">
+      <a href="#m0">0 Start here</a><a href="#m1">1 Picture</a><a href="#m2">2 Limits</a><a href="#m3">3 Knobs</a><a href="#m4">4 Queues</a>
+      <a href="#m5">5 Code</a><a href="#m6">6 Real speed</a><a href="#m7">7 Settings</a><a href="#m8">8 Auto-scale</a>
+      <a href="#m9">9 Lab</a><a href="#m10">10 Improve</a><a href="#cheat">Cheat sheet</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Work Project · Transport Simulation</div>
+  <h1>NAPM study guide</h1>
+  <p>New to NAPM? Start at <b>module 0</b> for the basics. Then ten short modules, from "what is this" to tuning threads automatically. Each one has a goal, a picture,
+  and the detail tucked behind <b>+</b> toggles. Tick a module off when you can answer its check question.</p>
+  <div class="call warn"><b class="t">All numbers here come from fake data</b>
+  They show how the model behaves, not how the real system performs. Real answers come after real exports are loaded.</div>
+  <div class="call tip"><b class="t">Worked examples</b>Six example sites run end to end, with charts and the settings that pass:
+  <a href="results/scenarios/REPORT.html">open the scenario report</a>.</div>
+</header>
+
+<!-- 0 -->
+<section class="mod" id="m0">
+  <div class="mod-head"><div class="num">0</div>
+    <div><h2>Start here: what NAPM is and how it works</h2><p class="goal">Goal: explain NAPM to someone new in two minutes, with no code.</p></div>
+    <label class="done"><input type="checkbox" data-m="0">Done</label></div>
+
+  <div class="card">
+    <h3 style="margin-top:0">What it is</h3>
+    <p><b>NAPM is the system that moves files from one place to another over FTP.</b> Something asks for a file to be sent;
+    NAPM queues the request, sends it as soon as a transfer slot is free, and records when it started and finished.
+    Files range from tiny (a fraction of a MB) to huge (15 GB), and requests arrive all day, sometimes in bursts.</p>
+    <p>The question this project answers: <b>with a given setup, does every file arrive within 1 minute, or within 5 minutes,
+    of being asked for?</b></p>
+    <p class="small">What the letters N-A-P-M stand for isn't confirmed yet; this guide only needs what it does.</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">The life of one file</h3>
+    <p>Every transfer goes through the same three moments. The data records them as columns.</p>
+    <div class="tl" role="img" aria-label="Time line: 3 parts waiting, then 7 parts transferring">
+      <div class="w">wait</div><div class="w"></div><div class="w"></div>
+      <div class="x">transfer</div><div class="x"></div><div class="x"></div><div class="x"></div><div class="x"></div><div class="x"></div><div class="x"></div>
+    </div>
+    <div class="tl-marks"><span style="grid-column:1">▲ <b>request</b></span><span style="grid-column:4">▲ <b>start</b></span><span style="grid-column:10;justify-self:end"><b>end</b> ▲</span></div>
+    <div class="tscroll" style="margin-top:var(--space-sm)"><table>
+      <tr><th>Moment</th><th>What happens</th><th>In the data</th></tr>
+      <tr><td><b>Request</b></td><td>Someone asks for the file. The clock for 1 min / 5 min starts here.</td><td><code>request_time</code> (always there)</td></tr>
+      <tr><td><b>Start</b></td><td>A free transfer slot picks the file up. Before this, it waits in line.</td><td><code>start_time</code> (some sites only)</td></tr>
+      <tr><td><b>End</b></td><td>The last byte arrives.</td><td><code>end_time</code> (some sites only)</td></tr>
+    </table></div>
+    <p style="margin-top:var(--space-sm)"><b>Total time = end − request = waiting + transferring.</b> The waiting part is why a small file can still be late:
+    it was stuck in line behind big ones.</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">The three settings</h3>
+    <p>Think of a highway: lanes, a speed limit per lane, and a bridge at the end that can only carry so much traffic in total.</p>
+    <div class="grid g3">
+      <div class="kpi"><div class="k">Max spec rate</div><div class="v">The bridge</div><div class="s">total MB/s for all transfers together, e.g. 1000 MB/s. Comes from the spec.</div></div>
+      <div class="kpi blue"><div class="k">Concurrent FTP (threads)</div><div class="v">The lanes</div><div class="s">how many files can move at the same time, e.g. 8</div></div>
+      <div class="kpi cyan"><div class="k">Per-thread rate</div><div class="v">Speed limit</div><div class="s">fastest one transfer can go, e.g. 200 MB/s</div></div>
+    </div>
+    <h3>How they work together</h3>
+    <p>Each busy lane goes at its speed limit, <b>unless</b> the lanes together would overload the bridge. Then they split the bridge evenly.</p>
+    <pre class="mono">speed of each busy transfer = the smaller of  (per-thread rate)  and  (max rate ÷ busy transfers)</pre>
+    <div class="tscroll"><table>
+      <tr><th>Max 1000, per-thread 200</th><th>Each transfer gets</th><th>Total used</th></tr>
+      <tr><td>2 busy</td><td class="mono">200 MB/s</td><td class="mono">400</td></tr>
+      <tr><td>5 busy</td><td class="mono">200 MB/s</td><td class="mono">1000 (bridge full)</td></tr>
+      <tr><td>10 busy</td><td class="mono">100 MB/s</td><td class="mono">1000 (split ten ways)</td></tr>
+    </table></div>
+    <p class="small" style="margin-top:var(--space-xs)">So past max ÷ per-thread (here 5) extra lanes don't add speed. They let more files start sooner, but each one goes slower.</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">Why files end up late</h3>
+    <div class="grid g3">
+      <div class="kpi" style="border-left-color:var(--critical)"><div class="k">All lanes busy</div><div class="v">Waiting</div><div class="s">too few threads for a burst: files queue up</div></div>
+      <div class="kpi" style="border-left-color:var(--critical)"><div class="k">Bridge full</div><div class="v">Slow lanes</div><div class="s">demand above the max rate: every transfer slows down</div></div>
+      <div class="kpi" style="border-left-color:var(--critical)"><div class="k">File too big</div><div class="v">Can't make it</div><div class="s">15 GB at 200 MB/s takes 75s, so it misses 1 min even with no wait</div></div>
+    </div>
+    <p style="margin-top:var(--space-sm)">Each cause has its own fix: <b>more threads</b>, a <b>bigger max rate</b> (or spreading the burst out), or a <b>faster per-thread rate</b>.
+    Picking the wrong one wastes money and doesn't help, which is why this project exists.</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">What the simulator adds</h3>
+    <div class="flow" role="img" aria-label="Real requests, plus chosen settings, go into the simulator, which reports percent on time">
+      <div class="box"><b>Real requests</b><span>file size + request time, for any date range</span></div><div class="arr">+</div>
+      <div class="box"><b>Settings to test</b><span>max rate, threads, per-thread rate</span></div><div class="arr">→</div>
+      <div class="box hot"><b>Simulator</b><span>replays every file through the lanes and the bridge</span></div><div class="arr">→</div>
+      <div class="box"><b>Answer</b><span>% of files on time for 1 min and 5 min: PASS only if every file made it</span></div>
+    </div>
+    <p>It tries a setup on last month's traffic in seconds, without touching the real system. Where start and end times exist,
+    they show what really happened, so the simulator can be checked against it.</p>
+  </div>
+
+  <details><summary>A few rows of data, and how to read them</summary><div class="body tscroll"><table>
+    <tr><th>file size</th><th>request</th><th>start</th><th>end</th><th>Total</th><th>1 min / 5 min</th></tr>
+    <tr><td class="mono">120 MB</td><td class="mono">14:03:15</td><td class="mono">14:03:15</td><td class="mono">14:03:16</td><td class="mono">1s</td><td><span class="pill pass">on time</span> / <span class="pill pass">on time</span></td></tr>
+    <tr><td class="mono">40 MB</td><td class="mono">14:03:20</td><td class="mono">14:04:35</td><td class="mono">14:04:36</td><td class="mono">76s</td><td><span class="pill fail">late</span> / <span class="pill pass">on time</span></td></tr>
+    <tr><td class="mono">9 GB</td><td class="mono">14:05:00</td><td class="mono">14:05:01</td><td class="mono">14:06:16</td><td class="mono">76s</td><td><span class="pill fail">late</span> / <span class="pill pass">on time</span></td></tr>
+  </table>
+  <p class="small">Row 2 was small but waited 75s for a free lane. Row 3 started right away but was too big to finish in a minute.
+  Same lateness, two different fixes.</p></div></details>
+
+  <div class="call tip"><b class="t">Check yourself</b>Max rate 600, per-thread 200, 6 files transferring. How fast does each go, and would a 7th thread speed them up?
+  <details><summary>Answer</summary><div class="body">600 ÷ 6 = 100 MB/s each (less than 200, so the bridge is the limit). A 7th thread lets one more file start, but all seven then share 600: about 86 MB/s each.</div></details></div>
+</section>
+
+<!-- 1 -->
+<section class="mod" id="m1">
+  <div class="mod-head"><div class="num">1</div>
+    <div><h2>The big picture</h2><p class="goal">Goal: say in one sentence what the simulator does.</p></div>
+    <label class="done"><input type="checkbox" data-m="1">Done</label></div>
+  <div class="card">
+    <p>Every row in your data is one <b>file transfer request</b>: "send this 120 MB file, asked for at 2:03:15pm."
+    The simulator replays those requests through a fixed number of FTP <b>threads</b> (lanes) and records
+    when each file would finish. Then it asks: <b>did the slowest files still finish in time?</b></p>
+    <div class="flow" role="img" aria-label="Request goes into a queue, then a thread, then done">
+      <div class="box"><b>Request</b><span>size + request time</span></div><div class="arr">→</div>
+      <div class="box"><b>Queue</b><span>waits if all threads are busy</span></div><div class="arr">→</div>
+      <div class="box hot"><b>Thread 1…N</b><span>moves bytes at its speed</span></div><div class="arr">→</div>
+      <div class="box"><b>Done</b><span>latency = done − request</span></div>
+    </div>
+    <p><b>One-sentence version:</b> it's a replay of real requests through a pretend NAPM setup, so you can test settings
+    without touching the real system.</p>
+  </div>
+  <details><summary>Words you'll see everywhere</summary><div class="body tscroll"><table>
+    <tr><th>Word</th><th>Meaning</th></tr>
+    <tr><td>Thread / concurrent FTP</td><td>One transfer lane. N threads = up to N files moving at once.</td></tr>
+    <tr><td>Per-thread rate</td><td>Fastest one thread can move data, e.g. 10 MB/s.</td></tr>
+    <tr><td>Max spec rate</td><td>Total cap for all threads together, e.g. 80 MB/s.</td></tr>
+    <tr><td>Wait time</td><td>Time in the queue before a thread picks the file up.</td></tr>
+    <tr><td>Transfer time</td><td>Time actually moving bytes.</td></tr>
+    <tr><td>Latency</td><td>Wait + transfer = done − request. This is what's graded.</td></tr>
+    <tr><td>SLA</td><td>The time limit: 60s (1 min) or 300s (5 min).</td></tr>
+    <tr><td>Load / utilization</td><td>Demand ÷ max rate. 50% = asking for half of what the pipe can carry.</td></tr>
+    <tr><td>Warm-up</td><td>The hour before your window that's simulated but not graded.</td></tr>
+  </table></div></details>
+  <details><summary>What the simulator is NOT</summary><div class="body">
+    <p>It isn't the real NAPM and doesn't send files. It doesn't know about network errors, retries, disk speed,
+    or priorities unless we add them. It's a model: useful to compare settings, and trustworthy once its
+    output matches what really happened (module 6).</p></div></details>
+  <div class="call tip"><b class="t">Check yourself</b>Explain to a coworker why "latency" includes the wait in the queue, not just the transfer.</div>
+</section>
+
+<!-- 2 -->
+<section class="mod" id="m2">
+  <div class="mod-head"><div class="num">2</div>
+    <div><h2>The 1 min and 5 min limits</h2><p class="goal">Goal: read "1min: 99.76% on time (2,345 late) FAIL" and know exactly what it means.</p></div>
+    <label class="done"><input type="checkbox" data-m="2">Done</label></div>
+  <div class="card">
+    <p><b>Example:</b> 10 files finished in these times (seconds from request), sorted:</p>
+    <pre class="mono">2  3  3  4  5  6  8  12  20  95</pre>
+    <p>Each file is checked on its own: did it finish within 60s (1 min) or 300s (5 min) of being requested?
+    Here 9 of 10 made 1 min, and all 10 made 5 min.</p>
+    <div class="grid g3">
+      <div class="kpi"><div class="k">On time</div><div class="v">≤ limit</div><div class="s">done within 60s / 300s of its request</div></div>
+      <div class="kpi blue"><div class="k">% on time</div><div class="v">9 of 10 = 90%</div><div class="s">the number every chart shows</div></div>
+      <div class="kpi cyan"><div class="k">PASS</div><div class="v">100%</div><div class="s">every file made it</div></div>
+    </div>
+    <h3>How the test works</h3>
+    <p>The run <span class="pill pass">passes</span> a limit only when <b>every file</b> finished within it.
+    In the example: 1 min <span class="pill fail">fail</span> (one file took 95s), 5 min <span class="pill pass">pass</span>.
+    Same thing, said another way: the <b>slowest file</b> has to be within the limit.</p>
+    <p class="small">The rule lives in <code>src/transport_sim.py</code>: <code>SLAS</code> holds the two limits (60, 300) and
+    <code>TARGET = 100.0</code> is the % that must be on time.</p>
+  </div>
+  <figure><img src="results/charts/max-80/2_latency_spread.png" alt="Histogram of file latency with the 1 and 5 minute limits and % on time in the title">
+    <figcaption>Fake month, 8 threads @ 10 MB/s, max 80: 2,345 files late for 1 min, 11 late for 5 min, so both fail.
+    The 11 are files too big to move in 5 min at 10 MB/s even with no queue.</figcaption></figure>
+  <details><summary>Why not just use the average?</summary><div class="body">
+    <p>Averages hide the files people complain about. In the example above the average is 15.8s, which looks fine,
+    but one file took 95s. Counting late files catches it.</p></div></details>
+  <details><summary>Three meanings of "pass 5 min" (confirm with your team)</summary><div class="body tscroll"><table>
+    <tr><th></th><th>Meaning</th><th>In the tool?</th></tr>
+    <tr><td>A</td><td>Each file done within 5 min of its request</td><td><span class="pill pass">yes</span></td></tr>
+    <tr><td>B</td><td>Everything requested in a 5-min window done before the next one</td><td><span class="pill fail">not yet</span></td></tr>
+    <tr><td>C</td><td>The simulation program itself runs under 5 min</td><td>always (about 1.5s on 1M rows)</td></tr>
+  </table></div></details>
+  <div class="call tip"><b class="t">Check yourself</b>1,000,000 files. 3 took 61–70s, the rest under 50s. Which limits pass? <details><summary>Answer</summary><div class="body">
+    5 min passes (all under 300s). 1 min fails: 99.9997% on time, but 3 files were late.</div></details></div>
+</section>
+
+<!-- 3 -->
+<section class="mod" id="m3">
+  <div class="mod-head"><div class="num">3</div>
+    <div><h2>The three knobs</h2><p class="goal">Goal: predict how fast each thread runs for any setting.</p></div>
+    <label class="done"><input type="checkbox" data-m="3">Done</label></div>
+  <div class="grid g3">
+    <div class="kpi"><div class="k">Max spec rate</div><div class="v mono">80 MB/s</div><div class="s">The pipe. From the spec sheet, never from data.</div></div>
+    <div class="kpi blue"><div class="k">Threads (N)</div><div class="v mono">8</div><div class="s">How many files can move at once.</div></div>
+    <div class="kpi cyan"><div class="k">Per-thread rate</div><div class="v mono">10 MB/s</div><div class="s">Fastest one lane can go.</div></div>
+  </div>
+  <div class="card" style="margin-top:var(--space-sm)">
+    <p><b>The one formula.</b> When <i>k</i> threads are busy at the same moment, each one runs at:</p>
+    <pre class="mono">speed per busy thread = min( per-thread rate , max rate ÷ k )</pre>
+    <div class="tscroll"><table>
+      <tr><th>Busy threads (k)</th><th>max ÷ k</th><th>Each runs at</th><th>Total</th></tr>
+      <tr><td class="mono">2</td><td class="mono">40</td><td class="mono">10 (own cap)</td><td class="mono">20 MB/s</td></tr>
+      <tr><td class="mono">8</td><td class="mono">10</td><td class="mono">10</td><td class="mono">80 MB/s, pipe full</td></tr>
+      <tr><td class="mono">16</td><td class="mono">5</td><td class="mono">5 (shared)</td><td class="mono">80 MB/s, pipe full</td></tr>
+    </table></div>
+    <div class="call tip"><b class="t">The ceiling</b><span class="mono">max ÷ per-thread = 80 ÷ 10 = 8</span>. Past 8 busy threads, more threads
+    don't add speed; they split the same 80 MB/s more ways. Big files get slower, small files stop waiting in line.</div>
+  </div>
+  <div class="call tip"><b class="t">Check yourself</b>Max 20 MB/s, per-thread 10 MB/s, both of 2 threads busy. Speed each?
+  <details><summary>Answer</summary><div class="body">min(10, 20 ÷ 2) = 10 MB/s each. The pipe is exactly full, and nothing is shared down.</div></details></div>
+</section>
+
+<!-- 4 -->
+<section class="mod" id="m4">
+  <div class="mod-head"><div class="num">4</div>
+    <div><h2>How queues behave</h2><p class="goal">Goal: know why the busiest hour matters more than the average.</p></div>
+    <label class="done"><input type="checkbox" data-m="4">Done</label></div>
+  <div class="card">
+    <p>Think of a toll plaza. At 50% busy, cars rarely wait. At 90%, a small burst causes a line that takes a long
+    time to clear. Above 100%, the line <b>only grows</b> until traffic drops, no matter how many booths
+    you open, if they all share one road out.</p>
+    <div class="grid g2">
+      <div class="kpi"><div class="k">Average load (fake month, max 30)</div><div class="v mono">53%</div><div class="s">Looks safe…</div></div>
+      <div class="kpi" style="border-left-color:var(--critical)"><div class="k">Busiest hour</div><div class="v mono">120%</div><div class="s">…but 2pm is over the pipe. Only 44% of files make 5 min <span class="pill fail">fail</span></div></div>
+    </div>
+  </div>
+  <figure><img src="results/charts/max-30/1_load_vs_max.png" alt="Hourly demand line crossing the 30 MB/s max rate during work hours">
+    <figcaption>Each workday's 9–5 peak pokes over the 30 MB/s line (red dots). Those hours decide the result.</figcaption></figure>
+  <figure><img src="results/charts/max-30/4_queue_busiest_day.png" alt="Files in system climbing from 9am to about 1600 by 5pm then dropping">
+    <figcaption>What over-100% looks like: the backlog climbs all day and only clears when traffic drops after 5pm.</figcaption></figure>
+  <details><summary>The rules of thumb</summary><div class="body">
+    <p><b>Keep the busiest hour under about 70–80% of max rate.</b> Wait times don't grow in a straight line; they shoot up
+    as load approaches 100%. Roughly, average wait scales like <code>load ÷ (1 − load)</code>: 50% → 1×, 80% → 4×, 90% → 9×, 95% → 19×.</p>
+    <p><b>Little's law:</b> files in system = arrival rate × average time in system. If 2 files/s arrive and each spends 5s,
+    about 10 are in the system at any moment. Handy for sanity-checking the queue chart.</p></div></details>
+  <div class="call tip"><b class="t">Check yourself</b>Busiest hour is 110% of max. Will doubling threads fix it?
+  <details><summary>Answer</summary><div class="body">No. Threads share the same max rate. You need a bigger max rate, or to spread or shift requests out of that hour.</div></details></div>
+</section>
+
+<!-- 5 -->
+<section class="mod" id="m5">
+  <div class="mod-head"><div class="num">5</div>
+    <div><h2>Inside the code</h2><p class="goal">Goal: trace 4 files by hand and get the same answer as the program.</p></div>
+    <label class="done"><input type="checkbox" data-m="5">Done</label></div>
+  <div class="card">
+    <pre>CSV ─► load()      keep date window (+1h warm-up, not graded)
+    ─► main()      pre-checks: load %, busiest hour %, min per-thread speed
+    ─► run()       timestamps → seconds, pick a model
+         ├─ simulate()          fixed speed per thread ("even")
+         ├─ simulate_shared()   threads share the max rate (default)
+         └─ simulate_adaptive() thread limit moves with traffic (module 8)
+    ─► report()    latency → % on time per limit → PASS only if every file made it</pre>
+    <h3>Toy example: 2 threads, 10 MB/s each</h3>
+    <div class="tscroll"><table>
+      <tr><th>File</th><th>Requested</th><th>Size</th><th>Simple model</th><th>Shared, max 15 MB/s</th></tr>
+      <tr><td>A</td><td class="mono">0s</td><td class="mono">100 MB</td><td class="mono">done 10 → <b>10s</b></td><td class="mono">done 13.3 → <b>13.3s</b></td></tr>
+      <tr><td>B</td><td class="mono">0s</td><td class="mono">50 MB</td><td class="mono">done 5 → <b>5s</b></td><td class="mono">done 6.7 → <b>6.7s</b></td></tr>
+      <tr><td>C</td><td class="mono">2s</td><td class="mono">30 MB</td><td class="mono">waits till 5, done 8 → <b>6s</b></td><td class="mono">starts 6.7, done 10.7 → <b>8.7s</b></td></tr>
+      <tr><td>D</td><td class="mono">4s</td><td class="mono">20 MB</td><td class="mono">waits till 8, done 10 → <b>6s</b></td><td class="mono">starts 10.7, done 13.3 → <b>9.3s</b></td></tr>
+    </table></div>
+    <p class="small">Shared: with 2 busy, each gets min(10, 15 ÷ 2) = 7.5 MB/s, so everything takes longer.</p>
+  </div>
+  <details><summary>simulate(): checkout lanes</summary><div class="body">
+    <p><code>free</code> holds when each lane opens next. For each file in request order: take the soonest-free lane
+    (<code>heappop</code>), start = later of request time or lane-free time, end = start + size ÷ speed, put the lane back
+    busy until end (<code>heappush</code>). A heap hands back the smallest number fast, which is why 1M files take about 0.5s.</p></div></details>
+  <details><summary>simulate_shared(): event jumping + the virtual clock</summary><div class="body">
+    <p>It never steps second by second. It asks what happens next, an arrival or a finish, jumps time straight there,
+    and recalculates speeds. That's a <b>discrete-event simulation</b>.</p>
+    <p><b>Virtual clock <code>v</code></b>: all busy files move at the same speed, so one number tracks "MB each busy file has moved since the start."
+    A 30 MB file that starts when v = 50 finishes when v hits 80. Only <code>v</code> changes, not every file, so each event is cheap.</p>
+    <p>Checked: matches a slow second-by-second version on 180 random cases, and matches <code>simulate()</code> whenever
+    threads × rate ≤ max.</p></div></details>
+  <details><summary>load(): why a warm-up hour</summary><div class="body">
+    <p>If the run started at exactly midnight Oct 1, every lane would be empty, but in reality files from 11:58pm would still be moving.
+    The extra hour fills the lanes realistically; only rows marked <code>scored</code> count toward the result.</p></div></details>
+  <div class="call tip"><b class="t">Check yourself</b>Redo the shared column with max = 20 MB/s.
+  <details><summary>Answer</summary><div class="body">Each busy thread gets min(10, 20 ÷ 2) = 10, the same as the simple model: 10, 5, 6, 6 seconds.</div></details></div>
+</section>
+
+<!-- 6 -->
+<section class="mod" id="m6">
+  <div class="mod-head"><div class="num">6</div>
+    <div><h2>Learning real speed from data</h2><p class="goal">Goal: turn start and end times into a per-thread rate you can trust.</p></div>
+    <label class="done"><input type="checkbox" data-m="6">Done</label></div>
+  <div class="card">
+    <p>Each transfer's duration has two parts:</p>
+    <pre class="mono">duration (end − start) = overhead + size ÷ rate
+                         └ login, handshake   └ scales with size</pre>
+    <p>Plot duration against size for thousands of files and you get a rough straight line.
+    <b>Where it crosses zero size = overhead. How steep it is = 1 ÷ rate.</b></p>
+    <div class="grid g2">
+      <div class="kpi" style="border-left-color:var(--critical)"><div class="k">Middle value of size ÷ duration</div><div class="v mono">8.6 MB/s</div><div class="s">Wrong: small files are mostly overhead</div></div>
+      <div class="kpi" style="border-left-color:var(--good)"><div class="k">Straight-line fit</div><div class="v mono">25.1 MB/s + 1.50s</div><div class="s">Truth was 25 MB/s + 1.5s</div></div>
+    </div>
+    <div class="call warn"><b class="t">Use calm transfers only</b>A file that moved while 10 others were running was sharing the pipe,
+    so it looks slower than a thread really is. The script only fits transfers that started with ≤ 2 others running.</div>
+  </div>
+  <details><summary>The other two things start and end times give you</summary><div class="body">
+    <p><code>start − request</code> = the real queue wait. <code>end − request</code> = the real latency.</p>
+    <p><b>The trust test:</b> simulate the same window with the real settings and compare the simulated % on time with the
+    <code>observed</code> line. Close → trust the what-ifs. Far apart → something's missing from the model (overhead, retries, priority).</p></div></details>
+  <details><summary>Do I need Bayesian stats or a neural network?</summary><div class="body tscroll"><table>
+    <tr><th>Approach</th><th>Verdict</th></tr>
+    <tr><td>% of files on time</td><td><span class="pill pass">yes</span> It's the output being graded.</td></tr>
+    <tr><td>Straight-line fit</td><td><span class="pill pass">yes</span> Two numbers, easy to check.</td></tr>
+    <tr><td>Bootstrap (resample, rerun)</td><td><span class="pill mid">later</span> Shows how often a pass could flip to a fail on another month.</td></tr>
+    <tr><td>Bayesian model</td><td><span class="pill mid">not now</span> Same kind of range, much more work.</td></tr>
+    <tr><td>Neural network / SGD</td><td><span class="pill fail">no</span> The simulator is already exact and fast; a NN only approximates it.</td></tr>
+  </table><p class="small" style="margin-top:8px">Where ML would fit: forecasting next month's demand to feed into the simulator.</p></div></details>
+  <div class="call tip"><b class="t">Check yourself</b>Why is the middle value of size ÷ duration biased low?
+  <details><summary>Answer</summary><div class="body">A 2 MB file with 1.5s overhead looks like 2 ÷ 1.58 ≈ 1.3 MB/s even on a 25 MB/s thread. Small files dominate the count, so they drag the middle value down.</div></details></div>
+</section>
+
+<!-- 7 -->
+<section class="mod" id="m7">
+  <div class="mod-head"><div class="num">7</div>
+    <div><h2>Choosing settings for a run</h2><p class="goal">Goal: go from an input file to "start with N threads at R MB/s."</p></div>
+    <label class="done"><input type="checkbox" data-m="7">Done</label></div>
+  <div class="flow" role="img" aria-label="Four steps: learn speed, feasibility, search threads, confirm">
+    <div class="box"><b>1 · Learn speed</b><span>line fit on calm transfers</span></div><div class="arr">→</div>
+    <div class="box"><b>2 · Can it pass?</b><span>busiest hour, biggest files</span></div><div class="arr">→</div>
+    <div class="box hot"><b>3 · Search N</b><span>1, 2, 4, 8… then narrow</span></div><div class="arr">→</div>
+    <div class="box"><b>4 · Confirm</b><span>worst day + observed</span></div>
+  </div>
+  <div class="card">
+<pre>.venv/bin/python src/recommend.py data/real/export.parquet --from 2026-10-01 --to 2026-11-01 \
+    --max-mbps &lt;spec rate&gt; --limit 1min</pre>
+    <div class="tscroll"><table>
+      <tr><th>Step</th><th>Rule</th><th>If it fails</th></tr>
+      <tr><td>Busiest hour</td><td>≤ 80% of max rate</td><td>No thread count helps. Raise the max rate or move load.</td></tr>
+      <tr><td>Biggest files</td><td>overhead + biggest file ÷ rate ≤ limit</td><td>Per-thread rate too low. Every file must make it, so the biggest one counts.</td></tr>
+      <tr><td>Threads</td><td>smallest N where every file is on time</td><td>More isn't always better: threads split the max rate.</td></tr>
+    </table></div>
+    <div class="call good"><b class="t">Fake month result</b>Max 80, 5 min → <b>1 thread at 38.1 MB/s, 100% on time</b>.
+    1 min → <b>BLOCKED</b>: the biggest file (4,843 MB) needs 80.7 MB/s, more than the whole 80 MB/s pipe.
+    Max 30 → <b>BLOCKED</b> (busiest hour 120%).</div>
+  </div>
+  <details><summary>Shortcut: size from the concurrent-FTP curve</summary><div class="body">
+    <p>Pretend every file starts the moment it's requested and runs at the per-thread rate. Walk through time:
+    <b>+1 when a file starts, −1 when it finishes</b>. The running total is how many transfers are in flight.</p>
+    <div class="tscroll"><table>
+      <tr><th>Read off the curve</th><th>Sets</th></tr>
+      <tr><td>Biggest file ÷ limit</td><td>the lowest per-thread rate that can work</td></tr>
+      <tr><td>Highest point (peak)</td><td>threads, so no file ever waits</td></tr>
+      <tr><td>Peak × rate ≤ max rate?</td><td>yes → guaranteed pass. No → run the simulator; files can wait a little and still make it</td></tr>
+    </table></div>
+    <p class="small" style="margin-top:8px">Sites with real start and end times also get the curve of what actually happened.
+    Command: <code>src/concurrency.py</code> (one file) or <code>src/real_sites.py</code> (every site at once).</p></div></details>
+  <div class="call tip"><b class="t">Check yourself</b>Biggest file is 600 MB, overhead 1s, limit 60s. Minimum per-thread rate?
+  <details><summary>Answer</summary><div class="body">600 ÷ (60 − 1) ≈ 10.2 MB/s. Below that, even an idle system has one late file, so 1 min fails.</div></details></div>
+</section>
+
+<!-- 8 -->
+<section class="mod" id="m8">
+  <div class="mod-head"><div class="num">8</div>
+    <div><h2>Auto-scaling threads with traffic</h2><p class="goal">Goal: understand when adding and removing threads automatically pays off, and how to stop it flapping.</p></div>
+    <label class="done"><input type="checkbox" data-m="8">Done</label></div>
+  <div class="card">
+    <p>A fixed 8 threads is sized for 2pm on the busiest day, and is mostly idle at 3am. An <b>adaptive controller</b> checks the
+    queue every 30s:</p>
+    <div class="grid g2">
+      <div class="kpi" style="border-left-color:var(--critical)"><div class="k">Scale up fast</div><div class="v">× 2 threads</div><div class="s">when the oldest waiting file has waited &gt; 10s</div></div>
+      <div class="kpi" style="border-left-color:var(--good)"><div class="k">Scale down slowly</div><div class="v">− 1 thread</div><div class="s">after 10 calm checks in a row (5 min)</div></div>
+    </div>
+    <p style="margin-top:var(--space-sm)">Why <b>oldest wait</b> instead of how many files are queued? The SLA is about time. 100 tiny files
+    clear in seconds; 5 huge ones might not. The oldest wait is the closest thing to "someone is about to miss the limit."</p>
+    <h3>Fake month: 10 MB/s per thread, max 80, range 2–16</h3>
+    <div class="tscroll"><table>
+      <tr><th>Setup</th><th>1 min on time</th><th>Avg threads</th><th>Limit changes / month</th><th></th></tr>
+      <tr><td>Fixed 8</td><td class="mono">99.76%</td><td class="mono">8.0</td><td class="mono">0</td><td><span class="pill mid">baseline</span></td></tr>
+      <tr><td>Adaptive, down after 1 check</td><td class="mono">99.73%</td><td class="mono">2.9</td><td class="mono">15,613</td><td><span class="pill mid">flaps</span></td></tr>
+      <tr><td><b>Adaptive, down after 10</b></td><td class="mono"><b>99.76%</b></td><td class="mono"><b>4.1</b></td><td class="mono"><b>2,115</b></td><td><span class="pill pass">best</span></td></tr>
+      <tr><td>Adaptive, down after 20</td><td class="mono">99.76%</td><td class="mono">4.7</td><td class="mono">806</td><td><span class="pill pass">ok</span></td></tr>
+    </table></div>
+    <p class="small">Same % on time as fixed 8 using about half the threads on average. None pass 1 min here: at 10 MB/s per thread, 2,343 files are too big to make it even alone (module 7).</p>
+  </div>
+  <div class="grid g2">
+    <figure><img src="results/charts/adaptive-down1/adaptive_worst_day.png" alt="Thread limit flapping between 2 and 12 all day">
+      <figcaption>Down after 1: the limit flaps all day. Real FTP servers dislike constant connects and disconnects.</figcaption></figure>
+    <figure><img src="results/charts/adaptive-down10/adaptive_worst_day.png" alt="Thread limit jumps to 8 at 9am, holds 7, steps down after 5pm">
+      <figcaption>Down after 10: jumps at 9am, holds 7 all day, steps down after 5pm.</figcaption></figure>
+  </div>
+  <details><summary>When auto-scaling is worth it, and when it isn't</summary><div class="body">
+    <p><b>Worth it</b> when extra threads cost something: server connections, memory, licenses, or being polite to the far end.
+    <b>Not worth it</b> when threads are free and the busiest hour is under the pipe; then a fixed count at the
+    ceiling (max ÷ per-thread) is simpler and just as fast. And it can't help when the busiest hour is over 100% (module 4).</p>
+    <p><b>Does real NAPM support changing thread count while running?</b> Unknown. That's the first thing to check. If it only reads
+    settings at startup, the practical version is a schedule: e.g. 7 threads 9am–5pm, 3 otherwise.</p></div></details>
+  <details><summary>Knobs and what they do</summary><div class="body tscroll"><table>
+    <tr><th>Flag</th><th>Default</th><th>Raise it →</th></tr>
+    <tr><td><code>--tick</code></td><td>30s</td><td>reacts slower, fewer changes</td></tr>
+    <tr><td><code>--up-wait</code></td><td>10s</td><td>tolerates more waiting before adding threads</td></tr>
+    <tr><td><code>--down-after</code></td><td>10 checks</td><td>keeps threads longer, steadier, uses more threads</td></tr>
+    <tr><td><code>--min</code> / <code>--max</code></td><td>2 / 16</td><td>floor and ceiling on the thread limit</td></tr>
+  </table>
+  <p class="small" style="margin-top:8px">Pattern name: "fast up, slow down" with a cooldown. It's the same idea as TCP congestion control and cloud autoscalers.</p></div></details>
+  <div class="call tip"><b class="t">Check yourself</b>Why scale up by doubling but down by one?
+  <details><summary>Answer</summary><div class="body">A pile-up costs SLA misses right now, so react hard. Spare threads only cost a little, so release them carefully to avoid flapping.</div></details></div>
+</section>
+
+<!-- 9 -->
+<section class="mod" id="m9">
+  <div class="mod-head"><div class="num">9</div>
+    <div><h2>Lab: play with it</h2><p class="goal">Goal: build intuition by moving the knobs yourself.</p></div>
+    <label class="done"><input type="checkbox" data-m="9">Done</label></div>
+  <div class="card">
+    <div class="lab">
+      <div>
+        <div class="ctl"><label for="maxr">Max spec rate <span id="maxr-v" class="mono"></span></label>
+          <input type="range" id="maxr" min="20" max="200" step="5" value="80"></div>
+        <div class="ctl"><label for="thr">Threads <span id="thr-v" class="mono"></span></label>
+          <input type="range" id="thr" min="1" max="32" step="1" value="8"></div>
+        <div class="ctl"><label for="ptr">Per-thread rate <span id="ptr-v" class="mono"></span></label>
+          <input type="range" id="ptr" min="2" max="60" step="1" value="10"></div>
+        <div class="ctl"><label for="dem">Busy-hour demand <span id="dem-v" class="mono"></span></label>
+          <input type="range" id="dem" min="5" max="120" step="1" value="36">
+          <small>9am–5pm; the rest of the day is ¼ of this. Files: median 20 MB, a few 300 MB+.</small></div>
+        <p class="small">One simulated day, same shared-bandwidth model as the Python code, re-run every time you move a slider.</p>
+      </div>
+      <div>
+        <div class="grid g2" style="grid-template-columns:1fr 1fr">
+          <div class="kpi"><div class="k">Busy-hour load</div><div class="v mono" id="o-load"></div></div>
+          <div class="kpi blue"><div class="k">Thread ceiling</div><div class="v mono" id="o-ceil"></div><div class="s">max ÷ per-thread</div></div>
+        </div>
+        <div class="bars" id="bars" aria-live="polite"></div>
+        <div class="scale"><div></div><div id="scale"></div><div></div></div>
+        <p style="margin-top:var(--space-sm)" id="o-verdict"></p>
+      </div>
+    </div>
+    <h3>Try these, in order</h3>
+    <ol class="try">
+      <li>Start at the defaults. Drop threads one at a time. Where do late files suddenly pile up?</li>
+      <li>Set threads to 32. Do more files end up late? Compare with the ceiling number.</li>
+      <li>Push demand until busy-hour load passes 100%. Now try to rescue it with threads only. (You can't.)</li>
+      <li>Lower per-thread rate to 3. Even with plenty of threads, why does 5 min fail? (Hint: module 7, biggest files.)</li>
+    </ol>
+  </div>
+</section>
+
+<!-- 10 -->
+<section class="mod" id="m10">
+  <div class="mod-head"><div class="num">10</div>
+    <div><h2>Setting it up and improving it</h2><p class="goal">Goal: know the path from fake data to a model you'd defend in a meeting.</p></div>
+    <label class="done"><input type="checkbox" data-m="10">Done</label></div>
+  <div class="card tscroll">
+    <table>
+      <tr><th>#</th><th>Next step</th><th>Why</th><th>Status</th></tr>
+      <tr><td>1</td><td>Map your real column names; load one week</td><td>Everything else depends on it</td><td><span class="pill mid">needs you</span></td></tr>
+      <tr><td>2</td><td>Confirm what NAPM is and which SLA meaning (A/B)</td><td>Decides what we grade</td><td><span class="pill mid">needs you</span></td></tr>
+      <tr><td>3</td><td>Trust test: simulated vs observed % on time</td><td>Proves the model before using it</td><td><span class="pill fail">todo</span></td></tr>
+      <tr><td>4</td><td>Check: can NAPM change threads live, or only at start?</td><td>Adaptive vs scheduled threads</td><td><span class="pill fail">todo</span></td></tr>
+      <tr><td>5</td><td>Overhead as time, not bytes</td><td>More accurate when the pipe is tight</td><td><span class="pill fail">todo</span></td></tr>
+      <tr><td>6</td><td>Window-drain SLA (meaning B)</td><td>If that's what the team means</td><td><span class="pill fail">todo</span></td></tr>
+      <tr><td>7</td><td>Retries / failures from real logs</td><td>Real tails often come from retries</td><td><span class="pill fail">todo</span></td></tr>
+      <tr><td>8</td><td>Size classes (small vs big lanes)</td><td>Stops one huge file blocking small ones</td><td><span class="pill fail">idea</span></td></tr>
+      <tr><td>9</td><td>Bootstrap the pass/fail</td><td>"passes 9 months in 10" beats a single yes/no</td><td><span class="pill fail">idea</span></td></tr>
+      <tr><td>10</td><td>Demand forecast → simulate next month</td><td>Plan capacity before it hurts</td><td><span class="pill fail">idea</span></td></tr>
+    </table>
+  </div>
+  <details><summary>Project folder map</summary><div class="body"><pre>Transport Simulation/
+├── STUDY-GUIDE.html     this page
+├── README.md            how to run, where numbers came from
+├── GUIDE.md             choosing settings, written version
+├── src/transport_sim.py the simulator (3 models)
+├── src/recommend.py     threads + rate for a window
+├── src/concurrency.py   size from the concurrent-FTP curve
+├── src/real_sites.py    run every real site in one go
+├── src/scenarios.py     the six example sites + settings grid
+├── src/prerun.py        before-run check chart
+├── src/adaptive.py      fixed vs auto-scaling comparison
+├── src/plots.py         the standard after-run charts
+├── data/samples/        fake data
+├── data/real/           real exports (never committed)
+└── results/             findings, charts, scenarios/REPORT.html</pre></div></details>
+</section>
+
+<!-- cheat -->
+<section class="mod" id="cheat">
+  <h2>Cheat sheet</h2>
+  <div class="grid g2">
+    <div class="card"><h3 style="margin-top:0">Formulas</h3><pre class="mono">latency      = done − request
+thread speed = min(per-thread, max ÷ busy)
+ceiling      = max ÷ per-thread
+load         = MB/s requested ÷ max
+duration     ≈ overhead + size ÷ rate
+min rate     = big file ÷ (goal − overhead)</pre></div>
+    <div class="card"><h3 style="margin-top:0">Rules of thumb</h3>
+      <p>• Busiest hour under 70–80% of max.<br>• PASS = every file on time; the biggest file sets the min rate.<br>• Set rate from calm transfers, not the median.<br>
+      • Search threads; don't guess.<br>• Scale up fast, down slow.<br>• Trust the model only after it matches observed.</p></div>
+  </div>
+  <div class="card" style="margin-top:var(--space-sm)"><h3 style="margin-top:0">Commands (from the project folder)</h3>
+<pre>.venv/bin/python src/transport_sim.py DATA.parquet --from D1 --to D2 --sweep 2,4,8,16 --thread-mbps R --max-mbps M
+.venv/bin/python src/recommend.py     DATA.parquet --from D1 --to D2 --max-mbps M --limit 1min
+.venv/bin/python src/concurrency.py   DATA.parquet --from D1 --to D2 --max-mbps M
+.venv/bin/python src/real_sites.py    data/real/sites.csv --from D1 --to D2
+.venv/bin/python src/adaptive.py      DATA.parquet --from D1 --to D2 --thread-mbps R --max-mbps M --fixed 8 --min 2 --max 16
+.venv/bin/python src/plots.py         DATA.parquet --from D1 --to D2 --threads 8 --thread-mbps R --max-mbps M --out results/charts/NAME</pre></div>
+</section>
+</div>
+
+<script>
+// progress checkboxes (per-browser convenience only)
+(function(){
+  const boxes=[...document.querySelectorAll('input[data-m]')], prog=document.getElementById('prog');
+  let saved={}; try{saved=JSON.parse(localStorage.getItem('napm-guide')||'{}')}catch(e){}
+  const paint=()=>{prog.textContent=boxes.filter(b=>b.checked).length+' / '+boxes.length+' done'};
+  boxes.forEach(b=>{b.checked=!!saved[b.dataset.m];b.addEventListener('change',()=>{saved[b.dataset.m]=b.checked;
+    try{localStorage.setItem('napm-guide',JSON.stringify(saved))}catch(e){}paint()})});paint();
+  // highlight current module tab
+  const links=[...document.querySelectorAll('#tabs a')];
+  const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id))}}),{rootMargin:'-40% 0px -55% 0px'});
+  document.querySelectorAll('section.mod').forEach(s=>obs.observe(s));
+})();
+
+// lab: one-day shared-bandwidth simulation (same model as simulate_shared)
+(function(){
+  const MB=1e6, $=id=>document.getElementById(id);
+  function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);
+    t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+  // fixed base day: arrival "shape" + sizes; demand slider scales arrival density
+  const MEAN=20*Math.exp(1.2*1.2/2); // lognormal mean in MB
+  const base=[];{const r=rng(11);for(let i=0;i<140000;i++){const u=Math.max(r(),1e-12),v=r();
+    base.push(20*Math.exp(1.2*Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)))}}
+  function day(demand){
+    const lamBusy=demand/MEAN, lamOff=lamBusy/4, req=[], size=[]; let t=0,k=0; const r=rng(3);
+    while(t<86400&&k<base.length){const h=t/3600, lam=(h>=9&&h<17)?lamBusy:lamOff;
+      t+= -Math.log(Math.max(r(),1e-12))/lam; if(t<86400){req.push(t);size.push(base[k++]*MB)}}
+    return [req,size];
+  }
+  // tiny binary heap of [tag, idx]
+  function push(h,x){h.push(x);let i=h.length-1;while(i>0){const p=(i-1)>>1;if(h[p][0]<=h[i][0])break;[h[p],h[i]]=[h[i],h[p]];i=p}}
+  function pop(h){const top=h[0],last=h.pop();if(h.length){h[0]=last;let i=0;for(;;){let l=2*i+1,r=l+1,m=i;
+    if(l<h.length&&h[l][0]<h[m][0])m=l;if(r<h.length&&h[r][0]<h[m][0])m=r;if(m===i)break;[h[m],h[i]]=[h[i],h[m]];i=m}}return top}
+  function sim(req,size,n,rate,cap){
+    const m=req.length,end=new Float64Array(m),wait=[];let wh=0,act=[],i=0,t=0,v=0;
+    while(i<m||act.length||wh<wait.length){
+      const k=act.length,sp=k?Math.min(rate,cap/k):0,ta=i<m?req[i]:Infinity,td=k?t+Math.max(0,act[0][0]-v)/sp:Infinity;
+      if(td<=ta){v+=sp*(td-t);t=td;const [tag,j]=pop(act);v=Math.max(v,tag);end[j]=t}
+      else{v+=sp*(ta-t);t=ta;wait.push(i++)}
+      while(wh<wait.length&&act.length<n){const j=wait[wh++];push(act,[v+size[j],j])}
+      if(t>86400*6)break; // runaway guard
+    }
+    return end;
+  }
+  const XMAX=600, pos=x=>Math.min(100,Math.log10(1+x)/Math.log10(1+XMAX)*100);
+  $('scale').innerHTML=[1,10,60,300,600].map(x=>`<span style="left:${pos(x)}%">${x>=60?x/60+'m':x+'s'}</span>`).join('');
+  let cache={};
+  function run(){
+    const cap=+$('maxr').value,n=+$('thr').value,rate=+$('ptr').value,dem=+$('dem').value;
+    $('maxr-v').textContent=cap+' MB/s';$('thr-v').textContent=n;$('ptr-v').textContent=rate+' MB/s';$('dem-v').textContent=dem+' MB/s';
+    const load=dem/cap;$('o-load').textContent=Math.round(load*100)+'%';
+    $('o-load').parentElement.style.borderLeftColor=load>1?'var(--critical)':load>.8?'var(--warn)':'var(--good)';
+    $('o-ceil').textContent=Math.ceil(cap/rate)+' threads';
+    if(!cache[dem])cache[dem]=day(dem);
+    const [req,size]=cache[dem], end=sim(req,size,n,rate*MB,cap*MB), lat=req.map((r,i)=>(end[i]||86400*6)-r);
+    const worst=lat.reduce((m,x)=>x>m?x:m,0), late=lim=>lat.filter(x=>x>lim).length;
+    $('bars').innerHTML=`<div class="bar"><b>worst</b><div class="track">
+      <div class="fill" style="width:${pos(worst)}%"></div><div class="mark" style="left:${pos(60)}%"></div><div class="mark" style="left:${pos(300)}%"></div></div>
+      <span class="mono">${worst>=600?Math.round(worst/60)+' min':worst.toFixed(1)+'s'}</span></div>`;
+    const tag=(n,l)=>`<span class="pill ${n?'fail':'pass'}">${l} ${n?'fail':'pass'}</span> <span class="mono small">${n.toLocaleString()} late</span>`;
+    $('o-verdict').innerHTML=`${tag(late(60),'1 min')} &nbsp; ${tag(late(300),'5 min')}<br><span class="small">${req.length.toLocaleString()} files · bar = slowest file · red lines = 1 min and 5 min · pass = 0 late</span>`;
+  }
+  ['maxr','thr','ptr','dem'].forEach(id=>$(id).addEventListener('input',run));run();
+})();
+</script>
+</body>
+</html>

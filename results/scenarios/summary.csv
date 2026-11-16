@@ -1,0 +1,7 @@
+site,about,max,avg_load,busiest_hour,busiest_5min,biggest_gb,over_max_time,conc_p95,conc_p99,can_1min,best_1min,top_1min,best_5min,top_5min,charted_at
+site-a,"24h, week 1 busier, super random",1000,2%,65%,157%,15.0,0.09%,10,16,92.4%,none,97.59%,none,99.51%,64 thr @ 500 MB/s
+site-b,2-day burst then mellowing random bursts,500,5%,246%,304%,15.0,0.41%,14,17,92.3%,none,82.31%,none,83.65%,64 thr @ 500 MB/s
+site-c,"office hours weekdays, quiet weekends",300,3%,17%,46%,15.0,0.00%,2,3,99.3%,1 thr @ 300 MB/s,100.00%,1 thr @ 100 MB/s,100.00%,1 thr @ 100 MB/s
+site-d,nightly batch + month-end surge,800,3%,89%,127%,15.0,0.09%,8,12,97.2%,none,98.91%,2 thr @ 500 MB/s,100.00%,2 thr @ 500 MB/s
+site-e,"steady, 90% small + 10% huge files",400,3%,10%,43%,15.0,0.00%,2,3,95.4%,none,99.98%,1 thr @ 200 MB/s,100.00%,1 thr @ 200 MB/s
+site-f,"power outages on random days, backlog rush after",600,4%,77%,471%,15.0,0.07%,4,30,92.4%,none,96.33%,none,97.09%,64 thr @ 500 MB/s
