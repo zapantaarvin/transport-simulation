@@ -71,7 +71,7 @@ figure{margin:var(--space-sm) 0}figcaption{font-size:13px;color:var(--text-300);
 </head>
 <body>
 <nav class="strip" aria-label="Sections"><div class="strip-in"><div class="tabs">
-  <a href="#how">How to read</a><a href="#summary">Summary</a><a href="#maxrate">Max-rate test</a><a href="#curve">Sizing curve</a>
+  <a href="#how">How to read</a><a href="#summary">Summary</a><a href="#maxrate">Max-rate test</a><a href="#curve">Sizing curve</a><a href="#napm">NAPM output</a>
   <a href="#a">Site A</a><a href="#b">Site B</a><a href="#c">Site C</a><a href="#d">Site D</a><a href="#e">Site E</a><a href="#f">Site F</a>
 </div></div></nav>
 
@@ -183,6 +183,33 @@ figure{margin:var(--space-sm) 0}figcaption{font-size:13px;color:var(--text-300);
     <img src="site-a/6_concurrency.png" alt="Site A concurrency"><br><img src="site-b/6_concurrency.png" alt="Site B concurrency"><br>
     <img src="site-c/6_concurrency.png" alt="Site C concurrency"><br><img src="site-e/6_concurrency.png" alt="Site E concurrency"><br>
     <img src="site-f/6_concurrency.png" alt="Site F concurrency"></div></details>
+</section>
+
+<section id="napm">
+  <h2>NAPM-style output: latency percentiles by bandwidth</h2>
+  <p>The same traffic in NAPM's own report format. <code>comm_mbps</code> = total bandwidth, tested at ¼× to 3× each site's max, with 8 threads.
+  Three charts per site:</p>
+  <div class="grid g4">
+    <div class="kpi"><div class="k">Heat map</div><div class="s">% of days whose p50 / p75 / p90 / p95 / p99 latency is under 5 min and 1 min, for each comm_mbps</div></div>
+    <div class="kpi"><div class="k">Bandwidth timeline</div><div class="s">p90 / p95 / p99 latency (minutes) vs bandwidth, plus a table: smallest bandwidth for 5 min and for 1 min</div></div>
+    <div class="kpi"><div class="k">90p daily timeline</div><div class="s">each day's p90 latency, one line per comm_mbps. Spikes = bad days</div></div>
+  </div>
+  <div class="card tscroll" style="margin-top:var(--space-sm)"><table>
+    <tr><th>Site</th><th>Max</th><th>p90 under 5 / 1 min</th><th>p95 under 5 / 1 min</th><th>p99 under 5 / 1 min</th></tr>
+    <tr><td><b>A</b></td><td class="mono">1000</td><td class="mono">500 / 1000</td><td class="mono">1000 / 1000</td><td class="mono">1500 / 1500</td></tr>
+    <tr><td><b>B</b></td><td class="mono">500</td><td class="mono">1500 / 1500</td><td class="mono">1500 / 1500</td><td class="mono">1500 / 1500</td></tr>
+    <tr><td><b>C</b></td><td class="mono">300</td><td class="mono">75 / 75</td><td class="mono">75 / 75</td><td class="mono">75 / 150</td></tr>
+    <tr><td><b>D</b></td><td class="mono">800</td><td class="mono">800 / 800</td><td class="mono">800 / 800</td><td class="mono">800 / 1200</td></tr>
+    <tr><td><b>E</b></td><td class="mono">400</td><td class="mono">100 / 100</td><td class="mono">100 / 200</td><td class="mono">100 / 400</td></tr>
+    <tr><td><b>F</b></td><td class="mono">600</td><td class="mono">150 / 300</td><td class="mono">300 / 600</td><td class="mono">1800 / over 1800</td></tr>
+  </table></div>
+  <p class="small" style="color:var(--text-300);margin-top:var(--space-xs)">Smallest comm_mbps tested that gets that percentile of all files under the limit. A percentile under the limit still leaves the slowest files late, so these are lower than the "every file" settings above.</p>
+  <details><summary>Site A: NAPM charts</summary><div class="body"><img src="../napm/site-a/7_napm_heatmap.png" alt="Site A NAPM heat map"><br><img src="../napm/site-a/8_bandwidth_timeline.png" alt="Site A bandwidth timeline"><br><img src="../napm/site-a/9_p90_daily.png" alt="Site A p90 daily timeline"></div></details>
+  <details><summary>Site B: NAPM charts</summary><div class="body"><img src="../napm/site-b/7_napm_heatmap.png" alt="Site B NAPM heat map"><br><img src="../napm/site-b/8_bandwidth_timeline.png" alt="Site B bandwidth timeline"><br><img src="../napm/site-b/9_p90_daily.png" alt="Site B p90 daily timeline"></div></details>
+  <details><summary>Site C: NAPM charts</summary><div class="body"><img src="../napm/site-c/7_napm_heatmap.png" alt="Site C NAPM heat map"><br><img src="../napm/site-c/8_bandwidth_timeline.png" alt="Site C bandwidth timeline"><br><img src="../napm/site-c/9_p90_daily.png" alt="Site C p90 daily timeline"></div></details>
+  <details><summary>Site D: NAPM charts</summary><div class="body"><img src="../napm/site-d/7_napm_heatmap.png" alt="Site D NAPM heat map"><br><img src="../napm/site-d/8_bandwidth_timeline.png" alt="Site D bandwidth timeline"><br><img src="../napm/site-d/9_p90_daily.png" alt="Site D p90 daily timeline"></div></details>
+  <details><summary>Site E: NAPM charts</summary><div class="body"><img src="../napm/site-e/7_napm_heatmap.png" alt="Site E NAPM heat map"><br><img src="../napm/site-e/8_bandwidth_timeline.png" alt="Site E bandwidth timeline"><br><img src="../napm/site-e/9_p90_daily.png" alt="Site E p90 daily timeline"></div></details>
+  <details><summary>Site F: NAPM charts</summary><div class="body"><img src="../napm/site-f/7_napm_heatmap.png" alt="Site F NAPM heat map"><br><img src="../napm/site-f/8_bandwidth_timeline.png" alt="Site F bandwidth timeline"><br><img src="../napm/site-f/9_p90_daily.png" alt="Site F p90 daily timeline"></div></details>
 </section>
 
 <!-- sites -->

@@ -496,6 +496,14 @@ figcaption{font-size:13.5px;color:var(--text-300);margin-top:6px}
     </table></div>
     <p class="small" style="margin-top:8px">Sites with real start and end times also get the curve of what actually happened.
     Command: <code>src/concurrency.py</code> (one file) or <code>src/real_sites.py</code> (every site at once).</p></div></details>
+  <details><summary>NAPM-style output: percentiles by bandwidth</summary><div class="body">
+    <p>To match NAPM's own report, <code>src/napm_output.py</code> tests a list of bandwidths (<code>comm_mbps</code>) and makes three charts:
+    a heat map of % of days with p50–p99 under 5 / 1 min, a bandwidth timeline (p90/95/99 latency vs bandwidth, with a table of the smallest bandwidth for each limit),
+    and a 90p daily timeline (each day's p90, one line per bandwidth).</p>
+    <figure><img src="results/napm/sample/8_bandwidth_timeline.png" alt="p90, p95, p99 latency falling as bandwidth rises, crossing 5 and 1 minutes at 40">
+      <figcaption>Fake month, 8 threads: below 40 the pipe can't keep up and latency jumps to hours.</figcaption></figure>
+    <p class="small">A percentile under the limit still leaves the slowest files late, so it needs less bandwidth than "every file on time".
+    All six sites: <a href="results/scenarios/REPORT.html#napm">scenario report, NAPM output</a>.</p></div></details>
   <div class="call tip"><b class="t">Check yourself</b>Biggest file is 600 MB, overhead 1s, limit 60s. Minimum per-thread rate?
   <details><summary>Answer</summary><div class="body">600 ÷ (60 − 1) ≈ 10.2 MB/s. Below that, even an idle system has one late file, so 1 min fails.</div></details></div>
 </section>
@@ -615,6 +623,7 @@ figcaption{font-size:13.5px;color:var(--text-300);margin-top:6px}
 ├── src/recommend.py     threads + rate for a window
 ├── src/concurrency.py   size from the concurrent-FTP curve
 ├── src/real_sites.py    run every real site in one go
+├── src/napm_output.py   NAPM-style percentile charts by bandwidth
 ├── src/scenarios.py     the six example sites + settings grid
 ├── src/prerun.py        before-run check chart
 ├── src/adaptive.py      fixed vs auto-scaling comparison
