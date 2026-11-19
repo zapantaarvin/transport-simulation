@@ -1,0 +1,4 @@
+percentile,bandwidth_5min,bandwidth_1min
+p90,150,300
+p95,300,600
+p99,1800,> 1800

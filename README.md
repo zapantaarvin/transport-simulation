@@ -15,6 +15,7 @@ about 1.5s per config). Next: real column names.
 | `src/plots.py` | Charts (PNG) for one window |
 | `src/prerun.py` | Before-run charts from the input only: demand vs max, concurrent FTP needed, load-duration, file-size curve |
 | `src/concurrency.py` | Concurrent FTP over time (+1 at start, −1 at finish) → threads + per-thread rate, checked by the simulator. `all` = every scenario site |
+| `src/napm_output.py` | NAPM-style output: sweeps `comm_mbps` (total bandwidth) and charts % of days with p50–p99 under 5 / 1 min, latency vs bandwidth (p90/95/99 + table), and each day's p90. `all` = every scenario site, results in `results/napm/` |
 | `src/real_sites.py` | Runs every real site listed in a CSV (copy `data/sites.example.csv`). Uses start/end times where a site has them; works without. Output in `results/real/` (not committed) |
 | `src/scenarios.py` | Synthetic sites A–E (50k files each) + settings grid; results in `results/scenarios/` |
 | `src/adaptive.py` | Fixed vs auto-scaling threads comparison + worst-day chart |
